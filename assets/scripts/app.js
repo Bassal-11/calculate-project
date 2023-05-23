@@ -2,16 +2,16 @@ const defaultResult = 0;
 let currentResult = defaultResult;
 let logEntires = [];
 
-console.log(typeof([]));
 //input valued form user
 function getUserName() {
-  return parseInt(userInput.value);
+  return userInput.value;
 }
 // function output number result
 function greatAndWriteOutput(operation, numberBeforeCalc, calNumber) {
   const calculationDescriptions = `  ${numberBeforeCalc} ${operation}   ${calNumber}`;
   outputResult(currentResult, calculationDescriptions);
 }
+
 function writeToLog(operationIdentifier, prevResult, numberInput, Result) {
   const logEntry = {
     operation: operationIdentifier,
@@ -23,40 +23,54 @@ function writeToLog(operationIdentifier, prevResult, numberInput, Result) {
   console.log(logEntires);
 }
 
-function add() {
+//condition operation
+function calculateResult(calculationType) {
   const enteredNumber = getUserName();
+
+  if (
+    calculationType !== "ADD" &&
+    calculationType !== "subtract" &&
+    calculationType !== "multiply" &&
+    calculationType !== "divide"||
+    !enteredNumber
+  ) {
+    return;
+  }
   const instilNumber = currentResult;
-  currentResult += +enteredNumber;
-  greatAndWriteOutput("+", instilNumber, enteredNumber);
-  writeToLog('add', instilNumber, enteredNumber,currentResult);
+  let mathOperator;
+  if (calculationType === "ADD") {
+    currentResult += +enteredNumber;
+    mathOperator = "+";
+  } else if (calculationType === "subtract") {
+    currentResult -= +enteredNumber;
+    mathOperator = "-";
+  } else if (calculationType === "multiply") {
+    currentResult *= +enteredNumber;
+    mathOperator = "*";
+  } else {
+    currentResult /= +enteredNumber;
+    mathOperator = "/";
+  }
+  console.log("this", enteredNumber, instilNumber);
+  greatAndWriteOutput(mathOperator, instilNumber, enteredNumber);
+  writeToLog(calculationType, instilNumber, enteredNumber, currentResult);
+}
+
+//operator
+
+function add() {
+  calculateResult("ADD");
 }
 function subtract() {
-  const enteredNumber = getUserName();
-  currentResult -= +enteredNumber;
-  const instilNumber = currentResult;
-
-  greatAndWriteOutput("-", instilNumber, enteredNumber);
-  writeToLog('subtract', instilNumber, enteredNumber,currentResult);
-
+  calculateResult("subtract");
 }
 function multiply() {
-  const enteredNumber = getUserName();
-  const instilNumber = currentResult;
-
-  currentResult *= currentResult + enteredNumber;
-  greatAndWriteOutput("*", instilNumber, enteredNumber);
-  writeToLog('multiply', instilNumber, enteredNumber,currentResult);
-
+  calculateResult("multiply");
 }
 function divide() {
-  const instilNumber = currentResult;
-
-  const enteredNumber = getUserName();
-  currentResult /= currentResult / +enteredNumber;
-  greatAndWriteOutput("/", instilNumber, enteredNumber);
-  writeToLog('divide', instilNumber, enteredNumber,currentResult);
-
+  calculateResult("divide");
 }
+//buttons
 
 addBtn.addEventListener("click", add);
 subtractBtn.addEventListener("click", subtract);
